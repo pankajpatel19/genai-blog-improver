@@ -5,7 +5,8 @@ const blogSchema = new mongoose.Schema(
     content: String,
     prompt: String,
     processed: { type: Boolean, default: false },
-    improvedContent: String,
+    title: { type: String, default: "" },
+    improvedContent: { type: String, default: "" },
   },
   { timestamps: true },
 );

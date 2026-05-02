@@ -40,14 +40,14 @@ export const processBlog = async (req, res) => {
       return res.status(400).json({ message: "Blog already processed" });
     }
 
-    const improved = await improveBlog(blog.content, prompt);
-
-    blog.improvedContent = improved;
+    const { title, description } = await improveBlog(blog.content, prompt);
+    blog.improvedContent = description;
+    blog.title = title;
     blog.processed = true;
 
     await blog.save();
 
-    res.json({ improvedContent: blog.improvedContent });
+    res.json({ title: blog.title, description: blog.improvedContent });
   } catch (error) {
     console.error("Error: ", error);
     res.status(500).json({ message: "Internal Server Error" });

@@ -10,7 +10,7 @@ export const improveBlog = async (content, prompt) => {
           role: "user",
           content: [
             {
-              text: `Improve the following blog content based on this prompt: "${prompt}"\n\nContent:\n${content}`,
+              text: `Task: Improve the blog content below. Prompt: ${prompt} Content: ${content} Return the result strictly as a JSON object with exactly these two keys: "title" and "description". DO NOT include any conversational text, explanations, or triple backticks. Example format: {"title": "...","description": "..."}`,
             },
           ],
         },
@@ -22,10 +22,16 @@ export const improveBlog = async (content, prompt) => {
     });
 
     const response = await client.send(command);
+    let text = response.output.message.content[0].text;
 
-    return response.output.message.content[0].text;
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      text = jsonMatch[0];
+    }
+
+    return JSON.parse(text);
   } catch (error) {
-    console.error("❌ Bedrock Error:", error);
+    console.error(" Bedrock Error: ", error);
     throw error;
   }
 };
