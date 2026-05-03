@@ -19,17 +19,41 @@ export const improveBlog = async (content, prompt) => {
         maxTokens: 2000,
         temperature: 0.7,
       },
+      toolConfig: {
+        toolChoice: {
+          tool: { name: "BlogImprovement" },
+        },
+        tools: [
+          {
+            toolSpec: {
+              name: "BlogImprovement",
+              description: "Returns improved blog title and description",
+              inputSchema: {
+                json: {
+                  type: "object",
+                  properties: {
+                    title: {
+                      type: "string",
+                      description: "Improved blog title",
+                    },
+                    description: {
+                      type: "string",
+                      description: "Improved blog content",
+                    },
+                  },
+                  required: ["title", "description"],
+                },
+              },
+            },
+          },
+        ],
+      },
     });
 
     const response = await client.send(command);
-    let text = response.output.message.content[0].text;
+    let text = response?.output?.message?.content[0]?.toolUse?.input;
 
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      text = jsonMatch[0];
-    }
-
-    return JSON.parse(text);
+    return text;
   } catch (error) {
     console.error(" Bedrock Error: ", error);
     throw error;
