@@ -43,7 +43,7 @@ export const processBlog = async (req, res) => {
     const { title, description } = await improveBlog(blog.content, prompt);
     blog.improvedContent = description;
     blog.title = title;
-    blog.processed = true;
+    // blog.processed = true;
 
     await blog.save();
 

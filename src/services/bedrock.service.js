@@ -1,5 +1,6 @@
 import client from "../config/aws.js";
 import { ConverseCommand } from "@aws-sdk/client-bedrock-runtime";
+import { responseValidation } from "../utils/response.validation.js";
 
 export const improveBlog = async (content, prompt) => {
   try {
@@ -49,11 +50,11 @@ export const improveBlog = async (content, prompt) => {
         ],
       },
     });
-
     const response = await client.send(command);
     let text = response?.output?.message?.content[0]?.toolUse?.input;
+    let result = responseValidation.parse(text);
 
-    return text;
+    return result;
   } catch (error) {
     console.error(" Bedrock Error: ", error);
     throw error;
