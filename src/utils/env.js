@@ -7,6 +7,7 @@ export const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY;
 export const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY;
 export const PORT = process.env.PORT;
 export const MONGO_URI = process.env.MONGO_URI;
+export const AGENT_REGION = process.env.AGENT_REGION;
 
 export const checkEnv = () => {
   if (
@@ -15,7 +16,8 @@ export const checkEnv = () => {
     !AWS_REGION ||
     !AWS_ACCESS_KEY ||
     !AWS_SECRET_KEY ||
-    !MONGO_URI
+    !MONGO_URI ||
+    !AGENT_REGION
   ) {
     throw new Error("Missing environment variables");
   }
